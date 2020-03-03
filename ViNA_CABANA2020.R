@@ -43,15 +43,20 @@ dat.parse <- function(df, location, host){
 }
 
 #----- setwd -----
-setwd("ADD_YOUR_PATH")
+setwd("../ViNA_for_CABANA-master/")
 
 #------------------------ DATA MANIPULATION ------------------------
 
 #---- Loading data from Virus Detect  -----
 loaded_files <- list(
-vd.re1 <- readHTMLTable('example_blastn.html'),
-vd.re2 <- readHTMLTable('example_blastn.html'),
-#complete
+vd.re1 <- readHTMLTable('Cca59_blastn.html'),
+vd.re2 <- readHTMLTable('Czo24_blastn.html'),
+vd.re3 <- readHTMLTable('Czo25_blastn.html'),
+vd.re4 <- readHTMLTable('Czo42_blastn.html'),
+vd.re5 <- readHTMLTable('Czo56_blastn.html'),
+vd.re6 <- readHTMLTable('Hua25_blastn.html'),
+vd.re7 <- readHTMLTable('Ica87_blastn.html'),
+vd.re8 <- readHTMLTable('Jin116_blastn.html')
 )
 
 loaded_files[[1]] # change this number to check other inputs [['n']]
@@ -63,10 +68,10 @@ results.ls = temp = list(NULL)
     results.ls[[k]] <- temp[[k]]  %>%
       mutate(`Depth (Norm)` = as.numeric(as.character(`Depth (Norm)`)) )
     }
-
+results.ls
 #--- Adding metadata to Virus Detect Results  ----- 
-host <- rep("potato", 2) # add the number of samples to study
-locations <- c("Location1", "Location2") # add the name of the different locations
+host <- rep("potato", length(results.ls)) # add the number of samples to study
+locations <- c("Cca5", "Czo24", "Czo25", "Czo45", "Czo56", "Hua25", "Ica87", "Jin16") # add the name of the different locations
 # LOCATION KEY
 # CZO= Cuzco
 # HUA= HUANCAVELICA
@@ -86,7 +91,7 @@ df <- na.omit(as_tibble(rbind.fill(res)))
 #----- Create summary data and incidence matrix ----- 
 dfs <- ddply(df, .(sampleID, acronym), summarise, cov = mean(`Depth (Norm)`))
 dfs <- t(spread(dfs, sampleID, cov,  drop=TRUE , fill = 0))
-in.mat = t(apply(dfs[2:3,], 1, as.numeric))
+in.mat = t(apply(dfs[2:8,], 1, as.numeric))
 colnames(in.mat) <- dfs[1,]
 
 #--- incidence matrix results 
@@ -150,7 +155,7 @@ str(node.metrics)
 
 
 ## Network metrics
-network.metrics <-  networklevel(in.mat)
+network.metrics <-  networklevel(round(in.mat))
 # network.metrics # Want to know about the metrics? Call ?networklevel
 
 # Exploring by metric
@@ -172,11 +177,13 @@ meta <- df %>% select(Genus, host, Species, acronym) %>%
 str(meta)
 
 # Adding colors
-meta$colors <- ifelse( meta$Genus == "badnavirus", "#FA4616", 
-                      ifelse( meta$Genus == 'begomovirus', "yellow", 
-                              ifelse( meta$Genus == "cavemovirus", "brown",
-                                      ifelse( meta$Genus == "mastrevirus", "orange",
-                                              ifelse( meta$Genus == "potyvirus", "green", "purple")))))
+meta$colors <- ifelse( meta$Genus == "ilarvirus ", "#FA4616", 
+                      ifelse( meta$Genus == 'polerovirus ', "yellow", 
+                              ifelse( meta$Genus == "potexvirus", "brown",
+                                      ifelse( meta$Genus == "nepovirus", "orange",
+                                              ifelse( meta$Genus == "ipomovirus", "red",
+                                                    ifelse( meta$Genus == "badnavirus",  "gray",
+                                                      ifelse( meta$Genus == "potyvirus", "green", "purple")))))))
 
 # Combining node attributes from bipartite and igraph 
 V(g)$color <- c(rep("#046A38", length(V(g)$type[V(g)$type == "FALSE"])),
