@@ -59,7 +59,7 @@ loaded_files[[1]] # change this number to check other inputs [['n']]
 #--- Formatting as tibble and numbers  -----
 results.ls = temp = list(NULL) 
   for (k in seq_along(loaded_files)){
-    temp[[k]] <- as_tibble(loaded_files[[i]]$`NULL`[1:dim(loaded_files[[i]]$`NULL`)[2]])
+    temp[[k]] <- as_tibble(loaded_files[[k]]$`NULL`[1:dim(loaded_files[[k]]$`NULL`)[2]])
     results.ls[[k]] <- temp[[k]]  %>%
       mutate(`Depth (Norm)` = as.numeric(as.character(`Depth (Norm)`)) )
     }
@@ -76,12 +76,12 @@ locations <- c("Location1", "Location2") # add the name of the different locatio
 
 #--- Generating final data ----- 
 res <- list(NULL)
-for (i in seq_along(samples)){
+for (i in seq_along(results.ls)){
   print(i)
 res[[i]] <- dat.parse(results.ls[[i]], locations[i], host[i])
 }
 # Create a data frame with all individual information
-df <- na.omit(as.tibble(rbind.fill(res)))
+df <- na.omit(as_tibble(rbind.fill(res)))
 
 #----- Create summary data and incidence matrix ----- 
 dfs <- ddply(df, .(sampleID, acronym), summarise, cov = mean(`Depth (Norm)`))
@@ -132,7 +132,7 @@ visweb(sortweb(in.mat, sort.order="dec"), type= "none", # change to nested or di
 
 #----- Calculating metrics ----
 ## Node metrics
-(node.metrics <- specieslevel(in.mat))
+node.metrics <- specieslevel(round(in.mat))
 
 # Exploring metrics
 str(node.metrics)
@@ -159,7 +159,7 @@ network.metrics["weighted nestedness"] # Nestedness *weighted
 
 # Computing modularity
 computeModules(in.mat) # Default method: Becket
-(modularity <-  LPA_wb_plus(in.mat)) #== computeModules(Safariland, forceLPA=TRUE) 
+(modularity <-  LPA_wb_plus(in.mat)) 
 
 mod <- convert2moduleWeb(in.mat, modularity)
 plotModuleWeb(mod, weighted = F)
