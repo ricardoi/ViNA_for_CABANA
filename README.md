@@ -1,4 +1,4 @@
-# V_i_NA for CABANA 2020
+# V _i_ NA for CABANA 2020
 Capacity Building of Bioinformatic in Latin America Workshop in San Jose, Costa Rica, March 2-4, 2020.
 **NGS analysis applied to virome sequencing in agricultural systems** - Computational Workshop 
 University of Costa Rica, 2-4 March 2020
