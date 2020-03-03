@@ -43,7 +43,6 @@ dat.parse <- function(df, location, host){
 }
 
 #----- setwd -----
-setwd("/Users/ricardoialcala/Dropbox (UFL)/Alcala Briseno and Garrett/++Conferences/2020_CABANA_CostaRica/")
 setwd("ADD_YOUR_PATH")
 
 #------------------------ DATA MANIPULATION ------------------------
