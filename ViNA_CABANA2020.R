@@ -94,7 +94,7 @@ in.mat
 
 #------------------------ IGRAPH ------------------------
 #---- Generating graph object  ----- 
-g <- graph.incidence(in.mat)
+g <- graph.incidence(in.mat, weighted= TRUE)
 
 # Network attributes
 V(g)$name # Check the vertex names 
@@ -190,5 +190,5 @@ plot(g, vertex.shape=shapes, vertex.label=NA, vertex.size= as.numeric(V(g)$xx))
 # Davidson-Harel
 plot(g, vertex.shape=shapes, vertex.size= as.numeric(V(g)$xx), layout=layout_with_dh(g) )
 # Distributed Recursive
-plot(g, vertex.shape=shapes, vertex.size= as.numeric(V(g)$xx), layout=layout_with_drl(g) )
+plot(g, vertex.shape=shapes, edge.width= log(E(g)$weight), vertex.size= as.numeric(V(g)$xx), layout=layout_with_drl(g) )
 
