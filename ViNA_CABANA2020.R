@@ -49,8 +49,8 @@ setwd("ADD_YOUR_PATH")
 
 #---- Loading data from Virus Detect  -----
 loaded_files <- list(
-vd.re1 <- readHTMLTable('result_AMRW-37_34-Pool_SPK-1Millon.clean.fq/blastn.html'),
-vd.re2 <- readHTMLTable('result_AMRW-37_34-Pool_SPK-1Millon.clean.fq/blastn.html'),
+vd.re1 <- readHTMLTable('example_blastn.html'),
+vd.re2 <- readHTMLTable('example_blastn.html'),
 #complete
 )
 
