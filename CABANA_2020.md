@@ -3,9 +3,7 @@
 
 ---
 
-<hr>
-<h1 id="cabana-workshop">CABANA Workshop</h1>
-<h2 id="san-jose-costa-rica--university-of-costa-rica">San Jose Costa Rica @ University of Costa Rica</h2>
+<h1 id="cabana-workshop-san-jose-costa-rica--university-of-costa-rica">CABANA Workshop San Jose Costa Rica @ University of Costa Rica</h1>
 <h3 id="virome-network-analysis--v-i-n-a-framework-adapoted-for-virusdetect">Virome Network Analysis  (V <em>i</em> N A) framework adapoted for VirusDetect</h3>
 <h4 id="code-developed-by-ricardo-i-alcala-ph.d.-candidate--garrett-lab-university-of-florida">Code developed by Ricardo I Alcala Ph.D. candidate | @Garrett lab University of Florida</h4>
 <h5 id="contact-ralcalaufl.edu">contact: <a href="mailto:ralcala@ufl.edu">ralcala@ufl.edu</a></h5>
@@ -28,24 +26,30 @@ library<span class="token punctuation">(</span>igraph<span class="token punctuat
 library<span class="token punctuation">(</span>bipartite<span class="token punctuation">)</span>
 library<span class="token punctuation">(</span>XML<span class="token punctuation">)</span>
 library<span class="token punctuation">(</span>htmltab<span class="token punctuation">)</span>
+
 </code></pre>
-<pre class=" language-r"><code class="prism  language-r"><span class="token comment">#@---- Parsing function -----</span>
-dat.parse <span class="token operator">&lt;-</span> <span class="token keyword">function</span><span class="token punctuation">(</span>df<span class="token punctuation">,</span> location<span class="token punctuation">,</span> host<span class="token punctuation">)</span><span class="token punctuation">{</span>
-</code></pre>
-<pre class=" language-r"><code class="prism  language-r"><span class="token comment"># Formatting metadata</span>
-df<span class="token operator">$</span>sampleID <span class="token operator">&lt;-</span> location
-df<span class="token operator">$</span>host <span class="token operator">&lt;-</span> host
-<span class="token comment"># ReGex and residuals removal</span>
-names <span class="token operator">&lt;-</span> str_extract<span class="token punctuation">(</span>df<span class="token operator">$</span>Description<span class="token punctuation">,</span> <span class="token string">".*virus[:space:][:alnum:]"</span><span class="token punctuation">)</span>
-a <span class="token operator">&lt;-</span> gsub<span class="token punctuation">(</span><span class="token string">"virus i"</span><span class="token punctuation">,</span> <span class="token string">"virus"</span><span class="token punctuation">,</span> names<span class="token punctuation">)</span>
-a <span class="token operator">&lt;-</span> gsub<span class="token punctuation">(</span><span class="token string">"virus s"</span><span class="token punctuation">,</span> <span class="token string">"virus"</span><span class="token punctuation">,</span> a<span class="token punctuation">)</span>
-<span class="token comment"># if there are more 'CHARACTER' after virus, add another line as follows</span>
-<span class="token comment"># a &lt;- gsub("virus s", "virus", 'CHARACTER')</span>
-df<span class="token operator">$</span>Species <span class="token operator">&lt;-</span> gsub<span class="token punctuation">(</span><span class="token string">"virus p"</span><span class="token punctuation">,</span> <span class="token string">"virus"</span><span class="token punctuation">,</span> a<span class="token punctuation">)</span>
-<span class="token comment"># Generating pseudo-acronyms</span>
-df<span class="token operator">$</span>acronym <span class="token operator">&lt;-</span> abbreviate<span class="token punctuation">(</span>df<span class="token operator">$</span>Species<span class="token punctuation">)</span>
-print<span class="token punctuation">(</span>df<span class="token punctuation">)</span>
-<span class="token punctuation">}</span>
+<h2 id="notas">Notas:</h2>
+<p>Jan no confio cuando hay minimo dos mistmatches en los siRNAs</p>
+<p>Los 21 y 22 nt son mayoritariamente de virus<br>
+Los de 24 son mayoritariamente de origen vegetal</p>
+<p>En```R<br>
+#@---- Parsing function -----<br>
+dat.parse &lt;- function(df, location, host){</p>
+<pre><code>```R
+# Formatting metadata
+df$sampleID &lt;- location
+df$host &lt;- host
+# ReGex and residuals removal
+names &lt;- str_extract(df$Description, ".*virus[:space:][:alnum:]")
+a &lt;- gsub("virus i", "virus", names)
+a &lt;- gsub("virus s", "virus", a)
+# if there are more 'CHARACTER' after virus, add another line as follows
+# a &lt;- gsub("virus s", "virus", 'CHARACTER')
+df$Species &lt;- gsub("virus p", "virus", a)
+# Generating pseudo-acronyms
+df$acronym &lt;- abbreviate(df$Species)
+print(df)
+}
 </code></pre>
 <p>#----- setwd -----<br>
 setwd("…/ViNA_for_CABANA-master/")<br>
@@ -73,7 +77,17 @@ for (k in seq_along(loaded_files)){
 }
 results.ls
 </code></pre>
-<pre><code>#@--- Adding metadata to Virus Detect Results -----
+<pre><code>#@--- Adding metadata to Virus Detect cuando no se parecen a nada, se van a un 'archivo' especial de no 'matches' que 
+pueden tener secuencias de interés.
+
+Badnavirus en camote están a muy bajos titulos
+Mastrevirus en camote no se sabe que hace, pero esta bajo y tiene muy poca variación.
+
+
+SPCSV the HIV of sweetpotato 
+- no introducir ciertas variantes de un lugar a otro por los tipos de cultivares
+
+Results -----
 host &lt;- rep("potato", length(results.ls)) # add the number of samples to study
 locations &lt;- c("Cca5", "Czo24", "Czo25", "Czo45", "Czo56", "Hua25", "Ica87", "Jin16") # add the name of the different locations
 </code></pre>
